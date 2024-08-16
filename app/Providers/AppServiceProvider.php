@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Repositories\AccessTokenRepository;
+use App\Repositories\Interfaces\AccessTokenRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,7 +13,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->registerRepositories();
+
     }
 
     /**
@@ -20,5 +23,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
+    }
+
+
+    private function registerRepositories(): void
+    {
+        $this->app->singleton(AccessTokenRepositoryInterface::class,AccessTokenRepository::class);
     }
 }
