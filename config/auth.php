@@ -14,8 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
-        'passwords' => 'users',
+        'guard' => 'transporter-api',
     ],
 
     /*
@@ -36,9 +35,14 @@ return [
     */
 
     'guards' => [
-        'web' => [
+        'transporter-api' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'transporter',
+        ],
+
+        'company-api' => [
+            'driver' => 'session',
+            'provider' => 'company',
         ],
     ],
 
@@ -60,15 +64,14 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'transporter' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => \App\Repositories\Schemas\Transporter::class,
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'company' => [
+            'driver' => 'eloquent',
+            'model' => \App\Repositories\Schemas\Company::class,
+        ],
     ],
 
     /*

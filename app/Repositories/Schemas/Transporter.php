@@ -4,7 +4,7 @@ namespace App\Repositories\Schemas;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
  * @property int $id
@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
-class Transporter extends Model
+class Transporter extends Authenticatable
 {
     use HasFactory;
 
@@ -30,5 +30,16 @@ class Transporter extends Model
             created_at: $transporter->created_at,
             updated_at: $transporter->updated_at
         );
+    }
+
+    public static function fromDomain(\App\Domains\Transporter $transporter ): self
+    {
+        $self = new self();
+        $self->id = $transporter->id;
+        $self->name = $transporter->name;
+        $self->phone = $transporter->phone;
+        $self->created_at = $transporter->created_at;
+        $self->updated_at = $transporter->updated_at;
+        return $self;
     }
 }
