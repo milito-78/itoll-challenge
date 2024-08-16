@@ -12,6 +12,7 @@ use Illuminate\Support\Collection;
 
 /**
  * @property int $id
+ * @property int $order_id
  * @property ?OrderStatusEnum $from_status
  * @property OrderStatusEnum $to_status
  * @property int $changed_by
@@ -41,7 +42,7 @@ class OrderChangeHistory extends Model
     public static function toDomain(self $history): \App\Domains\OrderChangeHistory
     {
         return new \App\Domains\OrderChangeHistory(
-            order_id: $history->id,
+            order_id: $history->order_id,
             from: $history->from_status,
             to: $history->to_status,
             by: $history->changed_by,
