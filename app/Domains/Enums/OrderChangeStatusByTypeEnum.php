@@ -4,5 +4,11 @@ namespace App\Domains\Enums;
 
 enum OrderChangeStatusByTypeEnum : int
 {
-    case CREATED = 1;
+    case Company = 1;
+
+    case Transporter = 2;
+
+    case System = 3;
+
+    case Admin = 4;
 }

@@ -12,7 +12,7 @@ class OrderChangeHistory
         public ?OrderStatusEnum $from,
         public OrderStatusEnum $to,
         public ?int $by,
-        public OrderChangeStatusByTypeEnum $byType,
+        public OrderChangeStatusByTypeEnum $by_type,
         public ?string $reason = null
     )
     {

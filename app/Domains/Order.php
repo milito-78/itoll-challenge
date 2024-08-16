@@ -27,7 +27,7 @@ class Order
         public string $destination_latitude,
         public string $destination_longitude,
         public ?int  $transporter_id = null,
-        public OrderStatusEnum $status = OrderStatusEnum::CREATED,
+        public OrderStatusEnum $status = OrderStatusEnum::Created,
         public ?int $id = null,
         public ?Carbon $created_at = null,
         public ?Carbon $updated_at = null,
