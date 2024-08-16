@@ -24,7 +24,7 @@ use Illuminate\Support\Collection;
  * @property string $provider_mobile
  * @property string $origin_address
  * @property ?int $transporter_id
- * @property OrderStatusEnum $status
+ * @property OrderStatusEnum $status_id
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Collection<OrderChangeHistory>|null $histories
@@ -67,7 +67,7 @@ class Order extends Model
             destination_latitude: $order->destination_latitude,
             destination_longitude: $order->destination_longitude,
             transporter_id: $order->transporter_id,
-            status: $order->status,
+            status: $order->status_id,
             id: $order->id,
             created_at: $order->created_at,
             updated_at: $order->updated_at,

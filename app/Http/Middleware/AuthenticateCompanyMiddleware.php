@@ -31,7 +31,7 @@ class AuthenticateCompanyMiddleware
         if (!$token)
             throw new AuthenticationException();
 
-        $found = $this->authService->verifyToken($token,AccessTokenTypeEnum::Transporter);
+        $found = $this->authService->verifyToken($token,AccessTokenTypeEnum::Company);
         if (!$found)
             throw new AuthenticationException();
         $transporter = $this->companyService->details($found->user_id);

@@ -6,6 +6,7 @@ use App\Infrastructure\ApiResponse\Entities\MetaEntity;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
@@ -57,7 +58,7 @@ class DataResponse implements Arrayable, Responsable
 
     public function toResponse($request): JsonResponse|Response
     {
-        if ($this->code == ResponseSymphony::HTTP_CREATED)
+        if ($this->code == ResponseSymphony::HTTP_NO_CONTENT)
             return response()->json(null,$this->code);
 
         return response()->json($this->toArray(),$this->code);
@@ -95,7 +96,8 @@ class DataResponse implements Arrayable, Responsable
         {
             $this->data = $data->items();
             $this->setPaginatorMeta($data);
-        }else {
+        }
+        else {
             $this->data = $data;
         }
         return $this;

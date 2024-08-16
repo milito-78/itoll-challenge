@@ -7,6 +7,7 @@ use App\Domains\Enums\OrderStatusEnum;
 use App\Domains\Order;
 use App\Repositories\Interfaces\OrderRepositoryInterface;
 use App\Repositories\Queryable\AcceptOrderQueryable;
+use App\Repositories\Queryable\OrderQueryable;
 use App\Services\Dto\ChangeOrderStatusDto;
 use App\Services\Dto\CreateOrderDto;
 use Illuminate\Contracts\Pagination\Paginator;
@@ -19,7 +20,22 @@ class OrderService
     {
     }
 
-    public function getAcceptableList(int $page, int $per_page) : Paginator
+    public function getListForCompany(
+        int $company,
+        ?OrderStatusEnum $status = null,
+        int $page = 1,
+        int $per_page = 15
+    ) : Paginator
+    {
+        return $this->repository->getPaginate(new OrderQueryable(
+            page: $page,
+            per_page: $per_page,
+            company: $company,
+            status: $status
+        ));
+    }
+
+    public function getAcceptableList(int $page, int $per_page = 15) : Paginator
     {
         return $this->repository->getAcceptableOrders(new AcceptOrderQueryable($page,$per_page));
     }

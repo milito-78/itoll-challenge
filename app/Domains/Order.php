@@ -13,6 +13,11 @@ class Order
      */
     public ?Collection $status_change_histories = null;
 
+    /**
+     * @var Transporter|null
+     */
+    public ?Transporter $transporter = null;
+
     public function __construct(
         public int    $company_id,
         public string $tracking_code,

@@ -33,6 +33,7 @@ class OrderRepository implements Interfaces\OrderRepositoryInterface
     {
         $items = $this->getQuery()
             ->where("status_id",OrderStatusEnum::Created)
+            ->latest("id")
             ->simplePaginate(perPage: $queryable->per_page,page: $queryable->page)
             ->withQueryString();
 
@@ -137,15 +138,15 @@ class OrderRepository implements Interfaces\OrderRepositoryInterface
         if (!$order)
             return null;
 
-        if ($order->status == $dto->status)
+        if ($order->status_id == $dto->status)
             return false;
 
         $lock = Cache::lock("order-lock-". $order->id);
         try {
             $lock->block(3);
             DB::beginTransaction();
-            $from = $order->status;
-            $order->status = $dto->status;
+            $from = $order->status_id;
+            $order->status_id = $dto->status;
             $order->save();
 
             $this->createHistory(new OrderChangeHistory(
@@ -190,7 +191,7 @@ class OrderRepository implements Interfaces\OrderRepositoryInterface
         /**
          * @var ?Schemas\Order $found
          */
-        $found = $this->getQuery()->where("tracking_code" , $tracking)->with("histories")->first();
+        $found = $this->getQuery()->where("tracking_code" , $tracking)->with("histories",fn($query) => $query->latest("id"))->first();
         if (!$found) return null;
         return Schemas\Order::toDomain($found);
     }
@@ -216,7 +217,7 @@ class OrderRepository implements Interfaces\OrderRepositoryInterface
         $data->destination_address = $order->destination_address;
         $data->destination_latitude = $order->destination_latitude;
         $data->destination_longitude = $order->destination_longitude;
-        $data->status = $order->status;
+        $data->status_id = $order->status;
         $data->save();
 
         return $data;
@@ -235,7 +236,7 @@ class OrderRepository implements Interfaces\OrderRepositoryInterface
         $data->from_status = $history->from;
         $data->to_status = $history->to;
         $data->changed_by = $history->by;
-        $data->changed_by_type_id = $history->by_type;
+        $data->change_by_type_id = $history->by_type;
         $data->reason = $history->reason;
         $data->save();
 
