@@ -3,6 +3,7 @@
 namespace App\Repositories\Interfaces;
 
 use App\Domains\Company;
+use Illuminate\Support\Collection;
 
 interface CompanyRepositoryInterface
 {
@@ -13,4 +14,12 @@ interface CompanyRepositoryInterface
      * @return Company|null
      */
     public function getById(int $id): ?Company;
+
+    /**
+     * Get company list by id
+     *
+     * @param array $ids
+     * @return Collection<Company>
+     */
+    public function getByIds(array $ids): Collection;
 }

@@ -6,7 +6,6 @@ use App\Domains\Order;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\MergeValue;
-use Illuminate\Http\Resources\MissingValue;
 
 /**
  * @property Order $resource
@@ -20,7 +19,7 @@ class OrderResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $company = $this->mergeWhen(!is_null($this->resource->transporter), fn() => new CompanyResource($this->resource->company));
+        $company = $this->mergeWhen(!is_null($this->resource->company), fn() => new CompanyResource($this->resource->company));
         if ($company instanceof MergeValue){
             $company = $company->data;
         }

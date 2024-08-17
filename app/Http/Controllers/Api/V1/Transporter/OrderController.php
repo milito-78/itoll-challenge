@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Api\V1\Transporter;
 
 use App\Domains\Enums\OrderChangeStatusByTypeEnum;
 use App\Domains\Enums\OrderStatusEnum;
+use App\Domains\Order;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Transporter\ChangeOrderStatusRequest;
 use App\Http\Requests\V1\Transporter\TrackLocationRequest;
 use App\Http\Resources\V1\Transporter\OrderResource;
 use App\Http\Resources\V1\Transporter\OrderResourceCollection;
 use App\Infrastructure\ApiResponse\DataResponse;
+use App\Services\CompanyService;
 use App\Services\Dto\ChangeOrderStatusDto;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
@@ -19,7 +21,8 @@ use Symfony\Component\HttpFoundation\Response;
 class OrderController extends Controller
 {
     public function __construct(
-        private readonly OrderService $orderService
+        private readonly OrderService $orderService,
+        private readonly CompanyService $companyService
     )
     {
     }
@@ -27,6 +30,17 @@ class OrderController extends Controller
     public function acceptablePaginate(Request $request): DataResponse
     {
         $list = $this->orderService->getAcceptableList($request->input("page",1),$request->input("per_page",15));
+        $items  = collect($list->items());
+        $ids    = $items->pluck("company_id")->toArray();
+
+        $companies = $this->companyService->getByIds($ids)->keyBy("id")->toArray();
+        $items->each(function (Order $order) use ($companies){
+            if (key_exists($order->company_id, $companies)){
+                $order->company = $companies[$order->company_id];
+            }
+        });
+
+        $list->setCollection($items);
 
         return json_response(data: new OrderResourceCollection($list));
     }
@@ -89,8 +103,13 @@ class OrderController extends Controller
     {
         $data = $this->orderService->details($order);
         $transporter = auth("transporter-api")->id();
-        if (!$data || $data->transporter_id != $transporter){
+        if (!$data || ($data->transporter_id && $data->transporter_id != $transporter)){
             abort_json(Response::HTTP_NOT_FOUND,"Data not found");
+        }
+
+        $company = $this->companyService->details($data->company_id);
+        if ($company){
+            $data->company = $company;
         }
 
         return json_response(data: new OrderResource($data));

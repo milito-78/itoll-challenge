@@ -43,7 +43,7 @@ Route::group(["prefix" => "transporters"], function (){
     Route::prefix("v1")->middleware("transporter.auth")->group(function (){
         Route::prefix("orders")->group(function (){
             Route::get("/acceptable"            ,[TransporterOrderController::class, "acceptablePaginate"]);
-            Route::post("/{order}/accept"        ,[TransporterOrderController::class, "accept"]);
+            Route::post("/{order}/accept"       ,[TransporterOrderController::class, "accept"]);
             Route::put("/{order}/change-status" ,[TransporterOrderController::class, "changeStatus"]);
             Route::get("/{order}"               ,[TransporterOrderController::class, "show"]);
         });

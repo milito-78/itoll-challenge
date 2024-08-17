@@ -5,6 +5,7 @@ namespace App\Repositories\Schemas;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Collection;
 
 /**
  * @property int $id
@@ -47,5 +48,14 @@ class Company extends Authenticatable
         $self->created_at = $company->created_at;
         $self->updated_at = $company->updated_at;
         return $self;
+    }
+
+    /**
+     * @param Collection<Company> $companies
+     * @return Collection<\App\Domains\Company>
+     */
+    public static function collectionToDomain(Collection $companies): Collection
+    {
+        return $companies->map(fn(self $item) => self::toDomain($item));
     }
 }

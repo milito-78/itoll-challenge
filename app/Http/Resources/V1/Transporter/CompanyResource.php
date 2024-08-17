@@ -2,12 +2,12 @@
 
 namespace App\Http\Resources\V1\Transporter;
 
-use App\Domains\Transporter;
+use App\Domains\Company;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @property Transporter $resource
+ * @property Company $resource
  */
 class CompanyResource extends JsonResource
 {
@@ -19,9 +19,9 @@ class CompanyResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "id" => $this->resource->id,
-            "name" => $this->resource->name,
-            "phone" => $this->resource->phone,
+            "id"    => $this->resource->id,
+            "name"  => $this->resource->name,
+            "email" => $this->resource->email,
         ];
     }
 }
