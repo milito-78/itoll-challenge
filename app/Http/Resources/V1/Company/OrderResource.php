@@ -6,7 +6,6 @@ use App\Domains\Order;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\MergeValue;
-use Illuminate\Http\Resources\MissingValue;
 
 /**
  * @property Order $resource

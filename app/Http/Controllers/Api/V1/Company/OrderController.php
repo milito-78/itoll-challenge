@@ -11,13 +11,15 @@ use App\Http\Resources\V1\Company\OrderResourceCollection;
 use App\Infrastructure\ApiResponse\DataResponse;
 use App\Services\Dto\CreateOrderDto;
 use App\Services\OrderService;
+use App\Services\TransporterService;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class OrderController extends Controller
 {
     public function __construct(
-        private readonly OrderService $orderService
+        private readonly OrderService $orderService,
+        private readonly TransporterService $transporterService,
     )
     {
     }
@@ -75,7 +77,10 @@ class OrderController extends Controller
         if (!$data || $data->company_id != $company){
             abort_json(Response::HTTP_NOT_FOUND,"Data not found");
         }
-
+        if ($data->transporter_id){
+            $transporter = $this->transporterService->details($data->transporter_id);
+            $data->transporter = $transporter;
+        }
         return json_response(data: new OrderResource($data));
     }
 

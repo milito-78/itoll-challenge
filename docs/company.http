@@ -22,7 +22,7 @@ Content-Type: application/json
 }
 
 ### Get order details
-GET http://127.0.0.1:8000/api/companies/v1/orders/3058049148
+GET http://127.0.0.1:8000/api/companies/v1/orders/5146753990
 Authorization: Bearer gaYJG2nbME9b52cJHQxJWZP3QPA2RcOZCtOaHINd
 Content-Type: application/json
 
