@@ -19,7 +19,7 @@ class CompanySeeder extends Seeder
             "name" => "First Company",
             "password" => bcrypt("12345678pass"),
             "api_key"  => "api_key_webhook",
-            "url" => "http://first.localhost/api/order"
+            "url" => "http://localhost:8000/api/order/first"
         ]);
         Company::query()->updateOrCreate([
             "email" => "second@mrtdel.co",
@@ -27,7 +27,7 @@ class CompanySeeder extends Seeder
             "name" => "Second Company",
             "password" => bcrypt("12345678pass"),
             "api_key"  => "api_key_webhook",
-            "url" => "http://second.localhost/api/order"
+            "url" => "http://localhost:8000/api/order/second"
         ]);
         Company::query()->updateOrCreate([
             "email" => "third@mrtdel.co",
@@ -35,7 +35,7 @@ class CompanySeeder extends Seeder
             "name" => "Third Company",
             "password" => bcrypt("12345678pass"),
             "api_key"  => "api_key_webhook",
-            "url" => "http://third.localhost/api/order"
+            "url" => "http://localhost:8000/api/order/third"
         ]);
     }
 }

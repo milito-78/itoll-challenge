@@ -16,19 +16,19 @@ class TransporterSeeder extends Seeder
         Transporter::query()->updateOrCreate([
             "phone" => "09331234561",
         ],[
-            "name" => "First Company",
+            "name" => "First Transporter",
             "password" => bcrypt("pass12345678"),
         ]);
         Transporter::query()->updateOrCreate([
             "phone" => "09331234562",
         ],[
-            "name" => "Second Company",
+            "name" => "Second Transporter",
             "password" => bcrypt("pass12345678"),
         ]);
         Transporter::query()->updateOrCreate([
             "phone" => "09331234563",
         ],[
-            "name" => "Third Company",
+            "name" => "Third Transporter",
             "password" => bcrypt("pass12345678"),
         ]);
     }
