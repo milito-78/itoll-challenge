@@ -18,6 +18,11 @@ class Order
      */
     public ?Transporter $transporter = null;
 
+    /**
+     * @var Company|null
+     */
+    public ?Company $company = null;
+
     public function __construct(
         public int    $company_id,
         public string $tracking_code,

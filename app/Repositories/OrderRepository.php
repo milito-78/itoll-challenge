@@ -135,17 +135,17 @@ class OrderRepository implements Interfaces\OrderRepositoryInterface
         $order = $this->getQuery()->where("tracking_code" , $dto->tracking_code)->first();
         $result = false;
 
-        if (!$order)
+        if (!$order || $order->status_id == $dto->status)
             return null;
-
-        if ($order->status_id == $dto->status)
-            return false;
 
         $lock = Cache::lock("order-lock-". $order->id);
         try {
             $lock->block(3);
             DB::beginTransaction();
             $from = $order->status_id;
+            if ($dto->status == OrderStatusEnum::Accepted){
+                $order->transporter_id = $dto->by;
+            }
             $order->status_id = $dto->status;
             $order->save();
 

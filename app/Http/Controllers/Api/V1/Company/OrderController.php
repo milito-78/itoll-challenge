@@ -68,7 +68,7 @@ class OrderController extends Controller
         return json_response(code: Response::HTTP_NO_CONTENT);
     }
 
-    public function show(string $order)
+    public function show(string $order): DataResponse
     {
         $data = $this->orderService->details($order);
         $company = auth("company-api")->id();

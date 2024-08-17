@@ -1,0 +1,36 @@
+### Get acceptable orders list
+GET http://127.0.0.1:8000/api/transporters/v1/orders/acceptable
+Authorization: Bearer qTNZa4hLWk4CKdRTBflEw4Pq7dqPLv5qVUjju9fc
+Accept: application/json
+
+### Accept Order
+POST http://127.0.0.1:8000/api/transporters/v1/orders/5146753990/accept
+Authorization: Bearer qTNZa4hLWk4CKdRTBflEw4Pq7dqPLv5qVUjju9fc
+Accept: application/json
+
+### Get Order details
+GET http://127.0.0.1:8000/api/transporters/v1/orders/5146753990
+Authorization: Bearer qTNZa4hLWk4CKdRTBflEw4Pq7dqPLv5qVUjju9fc
+Accept: application/json
+
+### Change Order Status
+PUT http://127.0.0.1:8000/api/transporters/v1/orders/5146753990/change-status
+Authorization: Bearer qTNZa4hLWk4CKdRTBflEw4Pq7dqPLv5qVUjju9fc
+Accept: application/json
+Content-Type: application/json
+
+{
+    "status" : 4
+}
+
+
+### Store Transporter Location
+POST http://127.0.0.1:8000/api/transporters/v1/track-location
+Authorization: Bearer qTNZa4hLWk4CKdRTBflEw4Pq7dqPLv5qVUjju9fc
+Accept: application/json
+Content-Type: application/json
+
+{
+    "latitude" :  "26.71336",
+    "longitude" : "-166.98455"
+}
