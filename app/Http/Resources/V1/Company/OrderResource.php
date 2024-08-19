@@ -26,7 +26,7 @@ class OrderResource extends JsonResource
 
         $histories = $this->mergeWhen(
             !is_null($this->resource->status_change_histories),
-            (OrderChangeHistoryResource::collection($this->resource->status_change_histories))->toArray($request)
+            fn () => new OrderChangeHistoryResourceCollection($this->resource->status_change_histories)
         );
         if ($histories instanceof MergeValue){
             $histories = $histories->data;
