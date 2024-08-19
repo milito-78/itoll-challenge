@@ -1,0 +1,59 @@
+version: "3.7"
+services:
+    db:
+        image: mysql:8.0
+        container_name: martin-db
+        restart: unless-stopped
+        healthcheck:
+            test: [ "CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--silent" ]
+            interval: 5s
+            timeout: 3s
+            retries: 2
+            start_period: 0s
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_USER: ${DB_USERNAME}
+            SERVICE_NAME: mysql
+        volumes:
+            - ./docker/mysql:/docker-entrypoint-initdb.d
+    redis:
+        image: redis:7.2.2
+        command: redis-server --save "" --appendonly no
+        healthcheck:
+            test: [ "CMD", "redis-cli", "ping" ]
+            interval: 10s
+            timeout: 10s
+            retries: 5
+            start_period: 5s
+        volumes:
+            - ./docker/redis:/data
+
+    app:
+        build:
+            args:
+                user: martin
+                uid: 1000
+            context: ./
+            dockerfile: docker/Dockerfile
+        image: martin-laravel-image
+        container_name: martin-laravel-app
+        depends_on:
+            - db
+            - redis
+        restart: unless-stopped
+        working_dir: /var/www/
+        volumes:
+            - ./:/var/www
+    nginx:
+        image: nginx:alpine
+        container_name: martin-webserver
+        restart: unless-stopped
+        depends_on:
+            - app
+        ports:
+            - "8000:80"
+        volumes:
+            - ./:/var/www
+            - ./docker/nginx:/etc/nginx/conf.d/
