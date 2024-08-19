@@ -7,7 +7,6 @@ use App\Domains\Enums\OrderStatusEnum;
 use App\Domains\Order;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Transporter\ChangeOrderStatusRequest;
-use App\Http\Requests\V1\Transporter\TrackLocationRequest;
 use App\Http\Resources\V1\Transporter\OrderResource;
 use App\Http\Resources\V1\Transporter\OrderResourceCollection;
 use App\Infrastructure\ApiResponse\DataResponse;
@@ -76,6 +75,14 @@ class OrderController extends Controller
             abort_json(Response::HTTP_INTERNAL_SERVER_ERROR,"There is problem during changing order status. Please try again later");
         }
 
+        $this->orderService->notifyStatusChange($data->company_id,new ChangeOrderStatusDto(
+            tracking_code: $order,
+            status: $status,
+            by: $transporter,
+            type: OrderChangeStatusByTypeEnum::Transporter,
+            reason: $status->name . " by a transporter"
+        ));
+
         return json_response(code: Response::HTTP_NO_CONTENT);
     }
 
@@ -95,7 +102,15 @@ class OrderController extends Controller
         if (!$result) {
             abort_json(Response::HTTP_INTERNAL_SERVER_ERROR,"There is problem during accept order. Please try again later");
         }
-        //TODO send job to handle webhook
+
+        $this->orderService->notifyStatusChange($data->company_id,new ChangeOrderStatusDto(
+            tracking_code: $order,
+            status: OrderStatusEnum::Accepted,
+            by: $transporter,
+            type: OrderChangeStatusByTypeEnum::Transporter,
+            reason: "Accept by a transporter"
+        ));
+
         return json_response(code: Response::HTTP_NO_CONTENT);
     }
 

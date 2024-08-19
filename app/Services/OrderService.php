@@ -5,12 +5,14 @@ namespace App\Services;
 use App\Domains\Enums\OrderChangeStatusByTypeEnum;
 use App\Domains\Enums\OrderStatusEnum;
 use App\Domains\Order;
+use App\Jobs\OrderChangedStatusJob;
 use App\Repositories\Interfaces\OrderRepositoryInterface;
 use App\Repositories\Queryable\AcceptOrderQueryable;
 use App\Repositories\Queryable\OrderQueryable;
 use App\Services\Dto\ChangeOrderStatusDto;
 use App\Services\Dto\CreateOrderDto;
 use Illuminate\Contracts\Pagination\Paginator;
+use Illuminate\Foundation\Bus\PendingDispatch;
 
 class OrderService
 {
@@ -100,5 +102,10 @@ class OrderService
     public function changeStatus(ChangeOrderStatusDto $dto): ?bool
     {
         return $this->repository->changeStatus($dto);
+    }
+
+    public function notifyStatusChange(int $company,ChangeOrderStatusDto $dto): PendingDispatch
+    {
+        return OrderChangedStatusJob::dispatch($company,$dto);
     }
 }
